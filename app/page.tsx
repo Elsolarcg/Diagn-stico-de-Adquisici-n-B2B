@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import ThemeToggle from "./components/ThemeToggle";
 import Reveal from "./components/Reveal";
 
@@ -27,12 +26,12 @@ const stats = [
 ];
 
 const features = [
-  { icon: <IconSearch />, label: "VISIBILIDAD LOCAL", title: "Google Business & SEO local", desc: "Auditamos si apareces donde tus clientes te buscan.", accent: "purple", wide: true },
-  { icon: <IconStar />, label: "REPUTACIÓN", title: "Reseñas y confianza online", desc: "Auditamos volumen y calidad de confianza.", accent: "green", wide: false },
-  { icon: <IconShare />, label: "REDES SOCIALES", title: "Presencia en redes", desc: "Auditamos la consistencia de tu marca.", accent: "purple", wide: false },
-  { icon: <IconGlobe />, label: "SITIO WEB", title: "Web: velocidad y conversión", desc: "Revisamos carga y claridad del mensaje.", accent: "green", wide: false },
-  { icon: <IconMapPin />, label: "DIRECTORIOS", title: "Listados y datos locales", desc: "Corregimos información en directorios globales.", accent: "purple", wide: false },
-  { icon: <IconTrending />, label: "INFORME", title: "Plan de acción priorizado", desc: "Las 3 acciones de mayor impacto inmediato.", accent: "green", wide: true },
+  { icon: <IconSearch />, label: "FUENTES DE ADQUISICIÓN", title: "¿De dónde vienen tus clientes hoy?", desc: "Evaluamos si tu mix de canales —referidos, publicidad, prospección activa— es sostenible o si depende de la suerte y el momento.", accent: "purple", wide: true },
+  { icon: <IconStar />, label: "CANAL PREDECIBLE", title: "Consistencia en el flujo de prospectos", desc: "Identificamos si tienes un sistema que opera con regularidad o si el negocio llega solo cuando hay momentum.", accent: "green", wide: false },
+  { icon: <IconShare />, label: "PROCESO COMERCIAL", title: "Qué pasa después del primer contacto", desc: "Analizamos si hay un proceso claro de seguimiento o si cada oportunidad depende de quién la atiende.", accent: "purple", wide: false },
+  { icon: <IconGlobe />, label: "ESFUERZO VS. SISTEMA", title: "Tiempo y recursos invertidos en vender", desc: "Medimos si tu equipo dedica tiempo real a la adquisición activa y si esa inversión tiene estructura detrás.", accent: "green", wide: false },
+  { icon: <IconMapPin />, label: "PROPUESTA DE VALOR", title: "Claridad del mensaje de tu empresa", desc: "Detectamos si tu oferta genera interés inmediato o si cuesta explicar lo que haces y por qué le importa al cliente.", accent: "purple", wide: false },
+  { icon: <IconTrending />, label: "INFORME ESTRATÉGICO", title: "Plan de acción priorizado para tu empresa", desc: "Las 2 o 3 palancas de mayor impacto en tu sistema de adquisición, con señales claras de dónde actuar primero.", accent: "green", wide: true },
 ];
 
 const steps = [
@@ -45,7 +44,7 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const router = useRouter();
 
-  const handleStart = (e: React.FormEvent) => {
+  const handleStart = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (!email) return;
     router.push(`/analyze?email=${encodeURIComponent(email)}`);
@@ -58,7 +57,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 border-b border-light-border dark:border-dark-border bg-light-card/70 dark:bg-dark-card/60 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <span className="font-accent text-xs uppercase tracking-[0.22em]">
-            Diagn<span className="text-blue-500">.</span>YA
+            Solar<span className="text-blue-500">.</span>Creative Group
           </span>
           <ThemeToggle />
         </div>
@@ -124,7 +123,7 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-6 py-32">
         <Reveal className="mb-20">
           <p className="font-accent text-[10px] uppercase tracking-[0.32em] text-light-muted dark:text-dark-muted mb-4">Qué analizamos</p>
-          <h2 className="font-display text-4xl sm:text-5xl font-medium tracking-tight max-w-xl">Cada canal donde tus clientes te buscan.</h2>
+          <h2 className="font-display text-4xl sm:text-5xl font-medium tracking-tight max-w-xl">Tu sistema de adquisición B2B, analizado en detalle.</h2>
         </Reveal>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-light-border dark:bg-dark-border border border-light-border dark:border-dark-border">
@@ -188,7 +187,7 @@ export default function Home() {
       {/* ══ FOOTER ══ */}
       <footer className="border-t border-light-border dark:border-dark-border py-10">
         <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
-          <span className="font-accent text-xs uppercase tracking-[0.22em]">Diagn.YA</span>
+          <span className="font-accent text-xs uppercase tracking-[0.22em]">Solar Creative Group</span>
           <p className="font-accent text-[10px] uppercase tracking-[0.22em] text-light-muted dark:text-dark-muted">
             © {new Date().getFullYear()} · Diagnóstico digital B2B
           </p>

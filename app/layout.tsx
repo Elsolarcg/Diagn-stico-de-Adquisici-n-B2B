@@ -25,9 +25,9 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "DiagnósticoYA — Encuentra dónde pierdes clientes",
+  title: "Solar Creative Group — Diagnóstico de Adquisición B2B",
   description:
-    "Analizamos más de 40 señales digitales de tu negocio y te entregamos un informe en menos de 2 minutos. Gratis, sin registro.",
+    "Analizamos tu sistema de adquisición B2B con preguntas estratégicas clave y te entregamos un diagnóstico personalizado en menos de 2 minutos. Gratuito.",
 };
 
 export default function RootLayout({

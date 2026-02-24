@@ -143,6 +143,46 @@ export async function POST(req: Request) {
       console.error("Error enviando el correo (pero el reporte sí se generó):", emailError);
     }
 
+    // Notificación interna al equipo de El Solar
+    try {
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+      const reportUrl = `${siteUrl}/report/${id}`;
+      await resend.emails.send({
+        from: 'El Solar Creative Group <operaciones@elsolaragencia.co>',
+        to: 'operaciones@elsolaragencia.co',
+        subject: `🎯 Nuevo lead B2B: ${userEmail} — Score ${reportData.score}/100`,
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h2 style="color: #0f172a; margin-bottom: 4px;">Nuevo lead completó su diagnóstico</h2>
+            <p style="color: #64748b; font-size: 14px; margin-top: 0;">Solar Creative Group · Diagnóstico de Adquisición B2B</p>
+            <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+              <tr>
+                <td style="padding: 10px 12px; background: #f8fafc; border-radius: 6px 6px 0 0; color: #64748b; font-size: 13px;">Email</td>
+                <td style="padding: 10px 12px; background: #f8fafc; border-radius: 6px 6px 0 0; font-weight: bold;">${userEmail}</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px 12px; background: #f1f5f9; color: #64748b; font-size: 13px;">Score</td>
+                <td style="padding: 10px 12px; background: #f1f5f9; font-weight: bold; color: ${reportData.score >= 65 ? '#16a34a' : reportData.score >= 50 ? '#ea580c' : '#dc2626'};">${reportData.score} / 100</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px 12px; background: #f8fafc; border-radius: 0 0 6px 6px; color: #64748b; font-size: 13px;">Perfil</td>
+                <td style="padding: 10px 12px; background: #f8fafc; border-radius: 0 0 6px 6px;">${reportData.perfil_empresa}</td>
+              </tr>
+            </table>
+            <div style="padding: 16px; background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 0 6px 6px 0; margin-bottom: 24px;">
+              <p style="color: #1e40af; font-size: 14px; margin: 0; line-height: 1.5;">${reportData.resumen_ejecutivo}</p>
+            </div>
+            <a href="${reportUrl}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
+              Ver reporte completo
+            </a>
+          </div>
+        `
+      });
+      console.log("Notificación interna enviada al equipo.");
+    } catch (notifError) {
+      console.error("Error enviando notificación interna:", notifError);
+    }
+
     return NextResponse.json({ success: true });
 
   } catch (error) {
