@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 
 const QUESTIONS = [
+  { id: 'phone', label: '¿Cuál es tu número de WhatsApp o celular?', type: 'tel' },
   { id: 'p1', label: '¿Cuánto tiempo lleva tu empresa operando?', type: 'select', options: ['Menos de 2 años', 'Entre 2 y 5 años', 'Entre 5 y 15 años', 'Más de 15 años'] },
   { id: 'p2', label: '¿Cuántas personas trabajan actualmente en tu empresa?', type: 'select', options: ['Solo yo o 1-2 personas', 'Entre 3 y 10 personas', 'Entre 10 y 30 personas', 'Más de 30 personas'] },
   // P3 ahora es multi-select
@@ -49,12 +50,16 @@ function AnalyzeContent() {
 
   const saveToSupabase = async (finalAnswers: Record<string, any>) => {
     setIsFinishing(true);
+    const { phone, ...diagnosticAnswers } = finalAnswers;
     const { data, error } = await supabase
       .from('diagnostics')
-      .insert([{ answers: finalAnswers, email: userEmail, status: 'pending' }])
+      .insert([{ answers: diagnosticAnswers, email: userEmail, phone: phone || null, status: 'pending' }])
       .select().single();
 
     if (!error && data) {
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'Lead');
+      }
       router.push(`/generating/${data.id}`);
     } else {
       setIsFinishing(false);
@@ -104,8 +109,31 @@ function AnalyzeContent() {
       </h2>
 
       <div className="grid gap-3">
-        {/* RENDERIZADO PARA MULTI-SELECT */}
-        {currentQuestion.type === 'multi-select' ? (
+        {/* RENDERIZADO PARA TEL */}
+        {currentQuestion.type === 'tel' ? (
+          <div className="space-y-4">
+            <input
+              type="tel"
+              autoFocus
+              className="w-full p-5 border-2 border-slate-100 rounded-2xl focus:border-blue-500 outline-none text-slate-700"
+              placeholder="Ej: 3001234567"
+              value={answers[currentQuestion.id] || ''}
+              onChange={(e) => setAnswers({ ...answers, [currentQuestion.id]: e.target.value })}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && answers[currentQuestion.id]) handleNext(answers[currentQuestion.id]);
+              }}
+            />
+            <button
+              onClick={() => handleNext(answers[currentQuestion.id] || '')}
+              disabled={!answers[currentQuestion.id]}
+              className="w-full py-5 bg-blue-600 text-white font-bold rounded-2xl disabled:opacity-50 shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all"
+            >
+              Continuar →
+            </button>
+          </div>
+
+        /* RENDERIZADO PARA MULTI-SELECT */
+        ) : currentQuestion.type === 'multi-select' ? (
           <div className="space-y-4">
             <div className="grid gap-3">
               {currentQuestion.options?.map(opt => {

@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     // MODIFICADO: Ahora también pedimos el 'email' de la base de datos
     const { data: diagnostic, error: fetchError } = await supabaseAdmin
       .from('diagnostics')
-      .select('answers, email') 
+      .select('answers, email, phone')
       .eq('id', id)
       .single();
 
@@ -32,7 +32,8 @@ export async function POST(req: Request) {
     }
 
     const answers = diagnostic.answers;
-    const userEmail = diagnostic.email; // Guardamos el email para usarlo luego
+    const userEmail = diagnostic.email;
+    const userPhone = diagnostic.phone || 'No proporcionado';
 
     const systemPrompt = `
       Eres un agente de diagnóstico comercial senior de El Solar Creative Group.
@@ -161,7 +162,11 @@ export async function POST(req: Request) {
                 <td style="padding: 10px 12px; background: #f8fafc; border-radius: 6px 6px 0 0; font-weight: bold;">${userEmail}</td>
               </tr>
               <tr>
-                <td style="padding: 10px 12px; background: #f1f5f9; color: #64748b; font-size: 13px;">Score</td>
+                <td style="padding: 10px 12px; background: #f1f5f9; color: #64748b; font-size: 13px;">Teléfono / WhatsApp</td>
+                <td style="padding: 10px 12px; background: #f1f5f9; font-weight: bold;">${userPhone}</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px 12px; background: #f8fafc; color: #64748b; font-size: 13px;">Score</td>
                 <td style="padding: 10px 12px; background: #f1f5f9; font-weight: bold; color: ${reportData.score >= 65 ? '#16a34a' : reportData.score >= 50 ? '#ea580c' : '#dc2626'};">${reportData.score} / 100</td>
               </tr>
               <tr>
