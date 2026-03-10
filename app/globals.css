@@ -17,6 +17,7 @@
   border-color: #3b82f6;
 }
 .PhoneInputCountry {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -31,8 +32,12 @@
   width: 100%;
   z-index: 1;
   border: 0;
+  outline: none;
+  box-shadow: none;
   opacity: 0;
   cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
 }
 .PhoneInputCountrySelectArrow {
   display: block;
