@@ -3,6 +3,7 @@
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
+import PhoneInput, { type Value as PhoneValue } from 'react-phone-number-input';
 
 const QUESTIONS = [
   { id: 'phone', label: '¿Cuál es tu número de WhatsApp o celular?', type: 'tel' },
@@ -28,6 +29,9 @@ function AnalyzeContent() {
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [isFinishing, setIsFinishing] = useState(false);
   
+  // Estado para el selector de teléfono con código de país
+  const [phoneValue, setPhoneValue] = useState<PhoneValue | undefined>(undefined);
+
   // Estados para manejar la opción "Otro"
   const [isEnteringOther, setIsEnteringOther] = useState(false);
   const [otherText, setOtherText] = useState("");
@@ -112,20 +116,19 @@ function AnalyzeContent() {
         {/* RENDERIZADO PARA TEL */}
         {currentQuestion.type === 'tel' ? (
           <div className="space-y-4">
-            <input
-              type="tel"
-              autoFocus
-              className="w-full p-5 border-2 border-slate-100 rounded-2xl focus:border-blue-500 outline-none text-slate-700"
-              placeholder="Ej: 3001234567"
-              value={answers[currentQuestion.id] || ''}
-              onChange={(e) => setAnswers({ ...answers, [currentQuestion.id]: e.target.value })}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && answers[currentQuestion.id]) handleNext(answers[currentQuestion.id]);
+            <PhoneInput
+              defaultCountry="CO"
+              value={phoneValue}
+              onChange={(val) => {
+                setPhoneValue(val);
+                setAnswers({ ...answers, [currentQuestion.id]: val || '' });
               }}
+              placeholder="300 123 4567"
+              autoFocus
             />
             <button
-              onClick={() => handleNext(answers[currentQuestion.id] || '')}
-              disabled={!answers[currentQuestion.id]}
+              onClick={() => handleNext(phoneValue || '')}
+              disabled={!phoneValue}
               className="w-full py-5 bg-blue-600 text-white font-bold rounded-2xl disabled:opacity-50 shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all"
             >
               Continuar →

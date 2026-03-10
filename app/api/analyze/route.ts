@@ -117,26 +117,154 @@ export async function POST(req: Request) {
       const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
       const reportUrl = `${siteUrl}/report/${id}`;
 
+      const scoreColor = reportData.score < 50 ? '#EF4444' : reportData.score < 65 ? '#F97316' : '#22C55E';
+      const scoreLabel = reportData.score < 50 ? 'Zona crítica' : reportData.score < 65 ? 'Requiere atención' : 'Buen desempeño';
+      const scoreBg = reportData.score < 50 ? '#FEF2F2' : reportData.score < 65 ? '#FFF7ED' : '#F0FDF4';
+      const firstProblem = reportData.problemas?.[0];
+      const remainingProblems = (reportData.problemas?.length || 1) - 1;
+      const etiquetaColor = firstProblem?.etiqueta === 'CRÍTICO' ? '#DC2626' : firstProblem?.etiqueta === 'MODERADO' ? '#EA580C' : '#2563EB';
+      const etiquetaBg = firstProblem?.etiqueta === 'CRÍTICO' ? '#FEF2F2' : firstProblem?.etiqueta === 'MODERADO' ? '#FFF7ED' : '#EFF6FF';
+      const tidycalUrl = 'https://tidycal.com/elsolar/sesion-de-diagnostico-auditoria-de-adquisicion-b2b';
+
       await resend.emails.send({
-        from: 'El Solar Creative Group <operaciones@elsolaragencia.co>', // REEMPLAZA ESTO CON TU CORREO VERIFICADO EN RESEND
+        from: 'El Solar Creative Group <operaciones@elsolaragencia.co>',
         to: userEmail,
-        subject: 'Tu diagnóstico de adquisición B2B está listo',
+        subject: `Tu score de adquisición B2B: ${reportData.score}/100 — aquí está tu diagnóstico`,
         html: `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #0f172a;">Hola, tu diagnóstico ha finalizado.</h2>
-            <p style="color: #334155; font-size: 16px; line-height: 1.5;">
-              Hemos analizado tus respuestas y detectado los cuellos de botella exactos en tu sistema de adquisición B2B.
-            </p>
-            <div style="margin: 30px 0;">
-              <a href="${reportUrl}" style="background-color: #2563eb; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
-                Ver mi reporte completo
-              </a>
-            </div>
-            <p style="color: #64748b; font-size: 14px;">
-              Si el botón no funciona, copia y pega este enlace en tu navegador:<br>
-              <a href="${reportUrl}" style="color: #2563eb;">${reportUrl}</a>
-            </p>
-          </div>
+          <!DOCTYPE html>
+          <html lang="es">
+          <body style="margin:0; padding:0; background-color:#f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f1f5f9; padding: 32px 16px;">
+              <tr><td align="center">
+                <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px; width:100%; background:#ffffff; border-radius:16px; overflow:hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+
+                  <!-- HEADER -->
+                  <tr>
+                    <td style="background-color:#0f172a; padding: 24px 32px;">
+                      <p style="margin:0; color:#94a3b8; font-size:12px; letter-spacing:2px; text-transform:uppercase; font-weight:600;">El Solar Creative Group</p>
+                      <p style="margin:4px 0 0; color:#ffffff; font-size:14px;">Diagnóstico de Adquisición B2B</p>
+                    </td>
+                  </tr>
+
+                  <!-- INTRO -->
+                  <tr>
+                    <td style="padding: 32px 32px 0;">
+                      <h1 style="margin:0 0 12px; font-size:22px; font-weight:800; color:#0f172a; line-height:1.3;">
+                        Tu diagnóstico está listo.
+                      </h1>
+                      <p style="margin:0; color:#475569; font-size:15px; line-height:1.6;">
+                        Analizamos tus respuestas y encontramos los puntos exactos donde tu sistema de adquisición está perdiendo oportunidades de negocio.
+                      </p>
+                    </td>
+                  </tr>
+
+                  <!-- SCORE CARD -->
+                  <tr>
+                    <td style="padding: 24px 32px;">
+                      <table width="100%" cellpadding="0" cellspacing="0" style="background:${scoreBg}; border-radius:12px; border:2px solid ${scoreColor};">
+                        <tr>
+                          <td style="padding: 24px; text-align:center;">
+                            <p style="margin:0 0 8px; font-size:11px; letter-spacing:2px; text-transform:uppercase; font-weight:700; color:#64748b;">TU SCORE DE ADQUISICIÓN B2B</p>
+                            <p style="margin:0; line-height:1;">
+                              <span style="font-size:64px; font-weight:900; color:${scoreColor};">${reportData.score}</span>
+                              <span style="font-size:24px; font-weight:400; color:#94a3b8;">/100</span>
+                            </p>
+                            <p style="margin:8px 0 0; display:inline-block; background:${scoreColor}; color:#ffffff; font-size:12px; font-weight:700; letter-spacing:1px; padding:4px 12px; border-radius:20px; text-transform:uppercase;">${scoreLabel}</p>
+                            <p style="margin:12px 0 0; color:#475569; font-size:14px; font-style:italic; line-height:1.4;">"${reportData.subtitulo_score}"</p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+
+                  <!-- RESUMEN EJECUTIVO -->
+                  <tr>
+                    <td style="padding: 0 32px 24px;">
+                      <p style="margin:0; color:#334155; font-size:15px; line-height:1.7;">${reportData.resumen_ejecutivo}</p>
+                    </td>
+                  </tr>
+
+                  <!-- PROBLEMA PREVIEW -->
+                  ${firstProblem ? `
+                  <tr>
+                    <td style="padding: 0 32px 8px;">
+                      <p style="margin:0 0 12px; font-size:12px; letter-spacing:1px; text-transform:uppercase; font-weight:700; color:#64748b;">Lo que encontramos:</p>
+                      <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc; border-radius:10px; border-left:4px solid ${etiquetaColor};">
+                        <tr>
+                          <td style="padding:16px 20px;">
+                            <p style="margin:0 0 6px;">
+                              <span style="background:${etiquetaBg}; color:${etiquetaColor}; font-size:11px; font-weight:700; letter-spacing:1px; padding:3px 8px; border-radius:4px; text-transform:uppercase;">${firstProblem.etiqueta}</span>
+                            </p>
+                            <p style="margin:0; font-size:15px; font-weight:700; color:#0f172a; line-height:1.4;">${firstProblem.titulo}</p>
+                          </td>
+                        </tr>
+                      </table>
+                      ${remainingProblems > 0 ? `
+                      <p style="margin:12px 0 0; color:#64748b; font-size:14px;">
+                        + <strong>${remainingProblems} problema${remainingProblems > 1 ? 's' : ''} más</strong> detallado${remainingProblems > 1 ? 's' : ''} en tu reporte completo.
+                      </p>` : ''}
+                    </td>
+                  </tr>` : ''}
+
+                  <!-- CTA PRIMARIO -->
+                  <tr>
+                    <td style="padding: 24px 32px 32px;">
+                      <table cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td style="background-color:#0f172a; border-radius:10px;">
+                            <a href="${reportUrl}" style="display:inline-block; padding:16px 32px; color:#ffffff; text-decoration:none; font-size:16px; font-weight:700; letter-spacing:0.3px;">
+                              Ver mi reporte completo →
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+
+                  <!-- DIVIDER -->
+                  <tr>
+                    <td style="padding: 0 32px;">
+                      <hr style="border:none; border-top:1px solid #e2e8f0; margin:0;">
+                    </td>
+                  </tr>
+
+                  <!-- SECCIÓN LLAMADA -->
+                  <tr>
+                    <td style="padding: 32px;">
+                      <p style="margin:0 0 8px; font-size:11px; letter-spacing:2px; text-transform:uppercase; font-weight:700; color:#64748b;">¿Qué sigue?</p>
+                      <h2 style="margin:0 0 12px; font-size:18px; font-weight:800; color:#0f172a; line-height:1.3;">
+                        El reporte es el primer paso.
+                      </h2>
+                      <p style="margin:0 0 20px; color:#475569; font-size:15px; line-height:1.7;">
+                        Tenemos un <strong>plan de acción personalizado</strong> para tu empresa: qué cambiar primero, cómo hacerlo y qué resultado esperar. Para recibirlo, necesitamos una conversación de 30 minutos.
+                      </p>
+                      <table cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td style="border:2px solid #0f172a; border-radius:10px;">
+                            <a href="${tidycalUrl}" style="display:inline-block; padding:14px 28px; color:#0f172a; text-decoration:none; font-size:15px; font-weight:700;">
+                              Agenda una llamada gratuita →
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+
+                  <!-- FOOTER -->
+                  <tr>
+                    <td style="background:#f8fafc; padding:20px 32px; border-top:1px solid #e2e8f0;">
+                      <p style="margin:0; color:#94a3b8; font-size:12px; line-height:1.6;">
+                        El Solar Creative Group · Bogotá, Colombia<br>
+                        <a href="${reportUrl}" style="color:#94a3b8;">Ver mi reporte</a>
+                      </p>
+                    </td>
+                  </tr>
+
+                </table>
+              </td></tr>
+            </table>
+          </body>
+          </html>
         `
       });
       console.log("Correo enviado con éxito a:", userEmail);
