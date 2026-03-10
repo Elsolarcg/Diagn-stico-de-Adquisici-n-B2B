@@ -56,9 +56,10 @@ export default function Home() {
       {/* ══ NAVBAR ══ */}
       <header className="sticky top-0 z-50 border-b border-light-border dark:border-dark-border bg-light-card/70 dark:bg-dark-card/60 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <span className="font-accent text-xs uppercase tracking-[0.22em]">
-            Solar<span className="text-blue-500">.</span>Creative Group
-          </span>
+          <a href="https://elsolaragencia.co">
+            <img src="/logo-white.png" alt="El Solar" className="h-6 w-auto hidden dark:block" />
+            <img src="/logo-blue.png" alt="El Solar" className="h-6 w-auto block dark:hidden" />
+          </a>
           <ThemeToggle />
         </div>
       </header>
