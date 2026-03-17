@@ -100,7 +100,7 @@ export default function Home() {
         <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-blue-500/5 dark:bg-blue-500/8 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full bg-purple-500/5 dark:bg-purple-500/6 blur-3xl pointer-events-none" />
 
-        <div className="relative max-w-3xl mx-auto px-6 py-20 w-full">
+        <div className="relative max-w-3xl mx-auto px-6 pt-12 pb-20 w-full">
 
           {/* Badge */}
           <div className="hero-item hero-d1 mb-8 inline-flex">
