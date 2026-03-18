@@ -143,6 +143,19 @@ body::after {
   opacity: 0.03;
 }
 
+/* ── Form mobile overrides ── */
+@media (max-width: 639px) {
+  .form-email-input {
+    height: 56px !important;
+    font-size: 16px !important; /* previene auto-zoom en iOS */
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .form-submit-btn {
+    height: 56px !important;
+  }
+}
+
 /* ── Button fill effect (bottom-to-top reveal on hover) ── */
 .btn-fill {
   position: relative;

@@ -127,13 +127,15 @@ export default function Home() {
                   type="email"
                   required
                   placeholder="tu@empresa.com"
-                  className="flex-1 bg-[#F8FAFF] dark:bg-[#0F0F0F] border border-[#E2E8F0] dark:border-[#2A2A2A] rounded-lg px-5 font-sans font-light text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/30 placeholder:text-[#9CA3AF] dark:placeholder:text-[#555555] text-[#111111] dark:text-[#EDEDED] transition-all h-[60px] sm:h-[52px]"
+                  className="form-email-input flex-1 bg-[#F8FAFF] dark:bg-[#0F0F0F] border border-[#E2E8F0] dark:border-[#2A2A2A] rounded-lg px-5 font-sans font-light text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/30 placeholder:text-[#9CA3AF] dark:placeholder:text-[#555555] text-[#111111] dark:text-[#EDEDED] transition-all"
+                  style={{ height: "52px" }}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <button
                   type="submit"
-                  className="btn-fill inline-flex items-center justify-center gap-2.5 bg-blue-600 text-white font-accent text-[10px] uppercase tracking-[0.22em] px-7 rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap h-[60px] sm:h-[52px]"
+                  className="form-submit-btn btn-fill inline-flex items-center justify-center gap-2.5 bg-blue-600 text-white font-accent text-[10px] uppercase tracking-[0.22em] px-7 rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap"
+                  style={{ height: "52px" }}
                 >
                   <span>Quiero mi diagnóstico</span>
                   <IconArrow />
