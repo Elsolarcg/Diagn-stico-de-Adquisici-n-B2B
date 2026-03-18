@@ -60,6 +60,14 @@ export default function RootLayout({
           <img height="1" width="1" style={{display:'none'}}
             src="https://www.facebook.com/tr?id=2114898828995080&ev=PageView&noscript=1" />
         </noscript>
+        {/* Microsoft Clarity */}
+        <Script id="microsoft-clarity" strategy="afterInteractive">{`
+          (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+          })(window, document, "clarity", "script", "vuazzwctxh");
+        `}</Script>
       </head>
       <body
         className={`${spaceGrotesk.variable} ${inter.variable} ${plusJakartaSans.variable} antialiased`}
